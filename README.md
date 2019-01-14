@@ -1,6 +1,7 @@
-# Meta-Reinforcement Learning of Structured Exploration Strategies
+# Model Agnostic Variational Exploration
 
-This repo contains code accompaning the paper, 	[Meta-Reinforcement Learning of Structured Exploration Strategies (Gupta et al., NIPS 2018)](https://arxiv.org/abs/1802.07245). 
+This repo contains code accompaning the paper, Model Agnostic Variational Exploration.
+The code closely follows the implementation for MAESN: https://github.com/RussellM2020/maesn_suite
 
 ### Dependencies
 This code is based off of the rllab code repository and can be installed in the same way (see below). This codebase is not necessarily backwards compatible with rllab.
