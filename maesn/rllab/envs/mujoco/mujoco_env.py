@@ -5,7 +5,7 @@ from rllab import spaces
 from rllab.envs.base import Env
 from rllab.misc.overrides import overrides
 
-from rllab.mujoco_py import MjModel, MjViewer
+from mujoco_py import MjModel, MjViewer
 
 from rllab.misc import autoargs
 from rllab.misc import logger
@@ -18,7 +18,7 @@ import mako.lookup
 MODEL_DIR = osp.abspath(
     osp.join(
         osp.dirname(__file__),
-        '../../../vendor/mujoco_models'
+        '/Users/navneetmkumar/Downloads/maesn_suite/maesn/vendor/mujoco_models'
     )
 )
 

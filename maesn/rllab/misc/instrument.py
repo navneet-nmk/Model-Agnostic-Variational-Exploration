@@ -344,7 +344,7 @@ def run_experiment_lite(
         log_dir=None,
         script="scripts/run_experiment_lite.py",
         python_command="python",
-        mode="local",
+        mode="local_docker",
         dry=False,
         docker_image=None,
         aws_config=None,
@@ -404,7 +404,11 @@ def run_experiment_lite(
 
     # params_list = []
 
+    print("Ran experiment")
+    print(len(batch_tasks))
+
     for task in batch_tasks:
+        print(task)
         call = task.pop("stub_method_call")
         if use_cloudpickle:
             import cloudpickle
@@ -437,21 +441,24 @@ def run_experiment_lite(
             sys.exit(1)
 
     if mode == "local":
+        print(mode)
         for task in batch_tasks:
             del task["remote_log_dir"]
             env = task.pop("env", None)
+            print(env)
             command = to_local_command(
                 task, python_command=python_command, script=osp.join(config.PROJECT_PATH, script), use_gpu=use_gpu)
-            print(command)
+            print("Command", command)
             if dry:
                 return
             try:
                 if env is None:
                     env = dict()
+                print(command)
                 subprocess.call(
                     command, shell=True, env=dict(os.environ, **env))
             except Exception as e:
-                print(e)
+                print('Exception', e)
                 if isinstance(e, KeyboardInterrupt):
                     raise
     elif mode == "local_docker":

@@ -153,6 +153,7 @@ class BatchMAESNPolopt(RLAlgorithm):
         return self.sampler.process_samples(itr, paths, prefix=prefix, log=log, task_idx=task_idx, noise_opt=noise_opt, joint_opt=joint_opt)
 
     def train(self):
+        print("Start Training")
         # TODO - make this a util
         flatten_list = lambda l: [item for sublist in l for item in sublist]
         config = tf.ConfigProto()
@@ -185,6 +186,7 @@ class BatchMAESNPolopt(RLAlgorithm):
             for itr in range(self.start_itr, self.n_itr):
                 itr_start_time = time.time()
                 with logger.prefix('itr #%d | ' % itr):
+                    print("Sampling set of tasks/goals for this meta-batch...")
                     logger.log("Sampling set of tasks/goals for this meta-batch...")
                     env = self.env
                     while 'sample_goals' not in dir(env):
@@ -200,6 +202,7 @@ class BatchMAESNPolopt(RLAlgorithm):
                         #    import pdb; pdb.set_trace() # test param_vals functions.
                         logger.log('** Step ' + str(step) + ' **')
                         logger.log("Obtaining samples...")
+                        print('** Step ' + str(step) + ' **')
                         #import ipdb
                         #ipdb.set_trace()                        
                         paths = self.obtain_samples(itr, reset_args=learner_env_goals, log_prefix=str(step))
@@ -252,6 +255,7 @@ class BatchMAESNPolopt(RLAlgorithm):
         self.shutdown_worker()
     
     def plotVisitationsFunc(self, paths, visitationFolder, visitationFile):
+        print('Plotted')
         plt.clf()
         for task in range(self.meta_batch_size):
             for traj in range(self.num_trajs):
@@ -260,7 +264,7 @@ class BatchMAESNPolopt(RLAlgorithm):
                 plt.plot(x,y)
         plt.xlim(0,1)
         plt.ylim(-0.5,0.5)
-        plt.savefig("/home/russellm/Plots/"+visitationFolder+"/"+visitationFile+".png")
+        plt.savefig("/Users/navneetmkumar/Downloads/maesn_suite/maesn/Plots/"+visitationFolder+"/"+visitationFile+".png")
     
     def log_diagnostics(self, paths, prefix):
         self.env.log_diagnostics(paths, prefix)

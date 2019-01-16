@@ -1,6 +1,3 @@
-
-
-
 from rllab.misc import ext
 from rllab.misc.overrides import overrides
 import rllab.misc.logger as logger
@@ -131,14 +128,17 @@ class MAESN_NPO(BatchMAESNPolopt):
                 new_params_latent.append(params_latent)
 
                 logli = dist.log_likelihood_sym(action_vars[i], dist_info_vars)
+                print(logli)
 
 
                 logli_latent = self.latent_dist.log_likelihood_sym(z_vars_latent[i], dist_info_vars_latent)
+                print(logli_latent)
 
                 # formulate as a minimization problem
                 # The gradient of the surrogate objective is the policy gradient
                 surr_objs.append(- tf.reduce_mean(logli * adv_vars[i]))
                 surr_objs_latent.append(- tf.reduce_mean(logli_latent * adv_vars_latent[i]))
+                print(surr_objs)
 
 
             input_list += obs_vars + action_vars + adv_vars + noise_vars + task_idx_vars + state_info_vars_list
@@ -167,6 +167,7 @@ class MAESN_NPO(BatchMAESNPolopt):
 
             lr = dist.likelihood_ratio_sym(action_vars[i], old_dist_info_vars[i], dist_info_vars)
             curr_obj = - tf.reduce_mean(lr*adv_vars[i])
+            print(curr_obj)
 
             #Computation of the KL divergence for tasks which have been selected
             curr_mean = tf.gather(self.policy.all_params["latent_means"], task_idx_vars[i])
@@ -178,17 +179,22 @@ class MAESN_NPO(BatchMAESNPolopt):
             # curr_obj += dist.kl_sym(self.policy.all_params['latent_means'][task_idx_vars[i]], self.policy.all_params['latent_means'][task_idx_vars[i]], 0 , 0)
             surr_objs.append(curr_obj)
 
+            print(surr_objs)
+
         if self.use_maml:
             surr_obj = tf.reduce_mean(tf.stack(surr_objs, 0))  # mean over meta_batch_size (the diff tasks)
             input_list += obs_vars + action_vars + adv_vars + noise_vars + task_idx_vars + old_dist_info_vars_list
+            print(surr_obj)
         else:
             surr_obj = tf.reduce_mean(tf.stack(all_surr_objs[0], 0)) # if not meta, just use the first surr_obj
+            print(surr_obj)
             input_list = init_input_list
 
         input_list += [self.kl_weighting_ph]
         if self.use_maml:
             mean_kl = tf.reduce_mean(tf.concat(kls, 0))  ##CF shouldn't this have the option of self.kl_constrain_step == -1?
             max_kl = tf.reduce_max(tf.concat(kls, 0))
+            print(mean_kl, max_kl)
 
             self.optimizer.update_opt(
                 loss=surr_obj,
@@ -221,6 +227,7 @@ class MAESN_NPO(BatchMAESNPolopt):
                     all_samples_data[step][i],
                     "observations", "actions", "advantages", "noises", "task_idxs"
                 )
+                print(inputs)
                 obs_list.append(inputs[0])
                 action_list.append(inputs[1])
                 adv_list.append(inputs[2])
@@ -279,9 +286,6 @@ class MAESN_NPO(BatchMAESNPolopt):
 
         elif self.kl_scheme == "0.002step100to0.05":
             curr_kl_weighting = min(0.05, 0.002 + (itr//5)*0.0005)
-
-    
-
 
         elif self.kl_scheme == "0.01stepcontto0.05":
             curr_kl_weighting = min(0.05, 0.01 + (itr)*0.001)

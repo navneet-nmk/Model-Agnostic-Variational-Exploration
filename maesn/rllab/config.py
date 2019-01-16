@@ -5,15 +5,15 @@ PROJECT_PATH = osp.abspath(osp.join(osp.dirname(__file__), '..'))
 
 LOG_DIR = PROJECT_PATH + "/data"
 
-USE_TF = False
+USE_TF = True
 
-DOCKER_IMAGE = "DOCKER_IMAGE"
+DOCKER_IMAGE = "russellm888/rllab3"
 
-DOCKERFILE_PATH = "/path/to/Dockerfile"
+DOCKERFILE_PATH = "/Users/navneetmkumar/Downloads/maesn_suite/maesn/docker/Dockerfile/"
 
 KUBE_PREFIX = "rllab_"
 
-DOCKER_LOG_DIR = "/tmp/expt"
+DOCKER_LOG_DIR = "/Users/navneetmkumar/Downloads/maesn_suite/maesn/tmp/"
 
 POD_DIR = PROJECT_PATH + "/.pods"
 
@@ -47,7 +47,7 @@ AWS_REGION_NAME = "us-east-1"
 
 CODE_SYNC_IGNORES = ["*.git/*", "*data/*", "*.pod/*"]
 
-DOCKER_CODE_DIR = "/root/code/rllab"
+DOCKER_CODE_DIR = "/Users/navneetmkumar/Downloads/maesn_suite/maesn/"
 
 AWS_CODE_SYNC_S3_PATH = "s3://to/be/overriden/in/personal"
 

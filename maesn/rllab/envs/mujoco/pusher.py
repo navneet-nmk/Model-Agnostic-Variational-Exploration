@@ -49,10 +49,10 @@ class PusherEnv(MujocoEnv, Serializable):
         self.choice = choice
         if train :
             assert sparse == False
-            self.all_goals =  pickle.load(open("/root/code/rllab/rllab/envs/goals/pusher_trainSet.pkl", "rb"))
+            self.all_goals =  pickle.load(open("/Users/navneetmkumar/Downloads/maesn_suite/maesn/rllab/envs/goals/pusher_trainSet.pkl", "rb"))
         else:
             assert sparse == True
-            self.all_goals = pickle.load(open('/root/code/rllab/rllab/envs/goals/pusher_valSet.pkl' , 'rb'))
+            self.all_goals = pickle.load(open('/Users/navneetmkumar/Downloads/maesn_suite/maesn/rllab/envs/goals/pusher_valSet.pkl' , 'rb'))
         self.sparse = sparse
         #all_goals = pickle.load(open("/home/russellm/generativemodel_tasks/maml_rl_fullversion/rllab/envs/mujoco/pusher_trainSet_100Tasks.pkl", "rb"))
         super(PusherEnv, self).__init__()

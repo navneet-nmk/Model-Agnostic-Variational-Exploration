@@ -24,35 +24,38 @@ import tensorflow as tf
 stub(globals())
 mode = 'local_docker'
  
-parser = argparse.ArgumentParser()
-parser.add_argument('algo' , type=str , help = 'Maesn or LSBaseline')
-parser.add_argument('--env', type=str,
-                    help='currently supported envs are Pusher, Wheeled and Ant')
-parser.add_argument('--initial_params_file' , type=str)
-parser.add_argument('--learning_rate', type = float , default = 1)
-parser.add_argument('--latent_dim', type = int , default = 2)
+#parser = argparse.ArgumentParser()
+#parser.add_argument('algo' , type=str , help = 'Maesn or LSBaseline', default='Maesn')
+#parser.add_argument('--env', type=str,
+                    #help='currently supported envs are Pusher, Wheeled and Ant', default='Pusher')
+#parser.add_argument('--initial_params_file' , type=str)
+#parser.add_argument('--learning_rate', type = float , default = 1)
+#parser.add_argument('--latent_dim', type = int , default = 2)
 
-args = parser.parse_args()
-assert args.algo in ['Maesn' , 'LSBaseline']
-assert args.env in ['Ant' , 'Pusher', 'Wheeled']
-initial_params_file = '/root/code/rllab/metaTrainedPolicies/' + args.initial_params_file
+#args = parser.parse_args()
+#assert args.algo in ['Maesn' , 'LSBaseline']
+#assert args.env in ['Ant', 'Pusher', 'Wheeled']
+initial_params_file = '/root/code/rllab/metaTrainedPolicies/' + 'hyperParams.txt'
 
 n_itr = 100
-ldim = args.latent_dim ;  default_step = args.learning_rate
+ldim = 2 ;  default_step = 1
+
+aalgo = 'Maesn'
+eenv = 'Pusher'
 
 goals = np.array(range(30))
 for counter, goal in enumerate(goals):
 
     ####################Env Selection#####################
-    if args.env == 'Pusher':
+    if eenv == 'Pusher':
         env = TfEnv( normalize(PusherEnv(sparse = True , train = False)))
         max_path_length = 100
 
-    elif args.env == 'Wheeled':
+    elif eenv == 'Wheeled':
         env = TfEnv( normalize(WheeledEnv(sparse = True , train = False)))
         max_path_length = 200
 
-    elif args.env == 'Ant':
+    elif eenv == 'Ant':
         env = TfEnv( normalize(AntEnvRandGoalRing(sparse = True , train = False)))
         max_path_length = 200
 
@@ -62,7 +65,7 @@ for counter, goal in enumerate(goals):
 
     baseline = LinearFeatureBaseline(env_spec=env.spec)
 
-    if args.algo == 'Maesn':
+    if aalgo == 'Maesn':
         algo = vpgMaesn(
             env=env,
             policy=None,
@@ -78,7 +81,7 @@ for counter, goal in enumerate(goals):
             reset_arg=np.asscalar(goal),
         )
 
-    elif args.algo == 'LSBaseline':
+    elif aalgo == 'LSBaseline':
         algo = vpgLS(
             env=env,
             policy=None,
@@ -103,11 +106,11 @@ for counter, goal in enumerate(goals):
         n_parallel=1,
         snapshot_mode="all",
         seed=1,
-        exp_prefix=args.algo+'_'+args.env+'_Test',
+        exp_prefix=aalgo+'_'+eenv+'_Test',
         exp_name=str(counter),
+        docker_image='russellm888/rllab3',
         mode = mode,
         sync_s3_pkl = True,
       
     )
-  
-    
+

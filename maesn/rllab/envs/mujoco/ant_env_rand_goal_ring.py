@@ -29,10 +29,10 @@ class AntEnvRandGoalRing(MujocoEnv, Serializable):
         self._goal_idx = goal
         if train :
             assert sparse == False
-            self.goals = pickle.load(open('/root/code/rllab/rllab/envs/goals/ant_trainSet.pkl', "rb"))
+            self.goals = pickle.load(open('/Users/navneetmkumar/Downloads/maesn_suite/maesn/rllab/envs/goals/ant_trainSet.pkl', "rb"))
         else:
             assert sparse == True
-            self.goals = pickle.load(open('/root/code/rllab/rllab/envs/goals/ant_valSet.pkl' , 'rb'))
+            self.goals = pickle.load(open('/Users/navneetmkumar/Downloads/maesn_suite/maesn/rllab/envs/goals/ant_valSet.pkl' , 'rb'))
         self.sparse = sparse
         super(AntEnvRandGoalRing, self).__init__(*args, **kwargs)
         Serializable.__init__(self, *args, **kwargs)
