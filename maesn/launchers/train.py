@@ -1,5 +1,6 @@
 import sys
 sys.path.append("/Users/navneetmkumar/Downloads/maesn_suite/maesn/")
+sys.path.append("/Users/navneetmkumar/Downloads/maesn_suite/maesn/rllab")
 print(sys.path)
 from rllab.baselines.linear_feature_baseline import LinearFeatureBaseline
 from rllab.baselines.zero_baseline import ZeroBaseline
